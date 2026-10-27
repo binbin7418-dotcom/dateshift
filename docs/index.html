@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DateShift — Photo Date Fixer: Repair Wrong EXIF Dates, File Dates & Dual-Camera Sync</title>
+<meta name="description" content="DateShift diagnoses EXIF, file-time and filename date conflicts, repairs them with a relative Date Maths offset, syncs dual-camera folders, and proves it with a re-check report. Copies only — originals never modified. 100% local, one-time $9.">
+<style>
+  body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;margin:0;color:#1c2733;line-height:1.6;background:#fbfcfe}
+  .wrap{max-width:820px;margin:0 auto;padding:32px 20px 64px}
+  h1{font-size:2rem;line-height:1.25;margin:.2em 0}
+  h2{margin-top:2em;font-size:1.25rem}
+  .sub{font-size:1.1rem;color:#43536a}
+  .cta{display:inline-block;background:#0b6e4f;color:#fff;padding:12px 22px;border-radius:8px;text-decoration:none;font-weight:600;margin:16px 0}
+  .card{background:#fff;border:1px solid #e3e9f0;border-radius:10px;padding:18px 20px;margin:14px 0}
+  .num{font-weight:700;color:#0b6e4f}
+  table{border-collapse:collapse;width:100%;margin:8px 0}
+  th,td{border:1px solid #e3e9f0;padding:8px 12px;text-align:left;vertical-align:top}
+  th{background:#f2f6f9}
+  footer{color:#7a8798;font-size:.85rem;margin-top:48px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p><strong>DateShift</strong></p>
+  <h1>Your camera clock was wrong — and now every photo says it happened at the wrong time.</h1>
+  <p class="sub">You changed the battery and forgot to reset the clock. You flew across time zones and the camera never got the memo. Or you shot a wedding with two cameras, and now the two sets of photos refuse to sit in the right order. DateShift diagnoses every photo's three dates — EXIF time, file time, and the date hiding in the file name — repairs them with one relative offset, and hands you back verified copies plus a report that proves what changed. Your originals are never touched.</p>
+  <a class="cta" href="https://binbinster.gumroad.com/l/dateshift-photo-date-fixer">Get DateShift — $9 one-time</a>
+  <h2>Date Maths: the hero feature</h2>
+  <div class="card">
+    <p>Other tools make you set every photo to one fixed time — which destroys the order of a whole shoot. DateShift works the way the problem actually happened: your clock was off by <em>an amount</em>, so every photo is off by that same amount. Enter the offset once (say, −5 h 37 m for a clock that ran fast) and every photo moves by exactly that much. The gaps between your photos — the story of the day — stay exactly as shot.</p>
+    <ul>
+      <li><strong>Relative shift</strong> — one signed offset in seconds, applied to EXIF times and file times together</li>
+      <li><strong>Preview before you commit</strong> — run Scan Only first: the diagnosis report lists every conflict (sources differing by more than 1 second) before anything is written</li>
+      <li><strong>Sync all three sources</strong> — one checkbox writes the same corrected time into EXIF and file time, so your photo app, your file manager and your file names finally agree</li>
+    </ul>
+  </div>
+  <h2>Dual-camera sync — the part nobody else does for you</h2>
+  <div class="card">
+    <p>Two cameras at one event, two clocks, one timeline that doesn't line up. Every other tool makes you work out the difference by hand. DateShift does the arithmetic: pick one photo from each camera taken at the same moment, and it computes the offset and applies it to the whole second-camera folder. In our seeded test, camera B ran 83 seconds slow; DateShift computed <span class="num">83.000 seconds</span> and aligned all 3 second-camera photos to camera A's times with <span class="num">0.000 s error</span>.</p>
+  </div>
+  <h2>Copies only — and a report that proves it</h2>
+  <div class="card">
+    <ul>
+      <li><strong>Originals never modified.</strong> DateShift only ever writes copies to a new output folder. In our own tests every original stayed byte-identical (SHA-256 verified).</li>
+      <li><strong>Pixel data untouched.</strong> Only timestamps change. Decoded-pixel hashes were unchanged on all 10 processed files in the seeded test.</li>
+      <li><strong>Every copy is re-read.</strong> The re-check report confirms EXIF and file time agree within 1 second — or flags the file instead of passing it.</li>
+      <li><strong>Honest sources.</strong> A photo dated from its file name is labelled <code>filename</code>; a scanned photo with no date anywhere is labelled <code>file_only</code> and its file time is shifted without inventing an EXIF date.</li>
+    </ul>
+  </div>
+  <h2>Before / after — our seeded acceptance test, measured</h2>
+  <div class="card">
+    <table>
+      <tr><th></th><th>Before</th><th>After DateShift</th></tr>
+      <tr><td>5 photos, clock fast by 5 h 37 m (20220 s)</td><td>EXIF and file times all 20220 s ahead of reality</td><td><span class="num">EXIF error 0.000 s, file-time error 0.000 s</span> on all 5; re-check 5/5 green</td></tr>
+      <tr><td>Photo with no EXIF, filename IMG_20230610_091530</td><td>No EXIF date at all</td><td><span class="num">EXIF 2023-06-10 09:15:30</span> written from the filename, source labelled filename</td></tr>
+      <tr><td>Scanned old photo, no EXIF, no dated filename</td><td>Only a file date: 1998-05-02 12:00:00</td><td><span class="num">File time shifted to 13:00:00 exactly</span>, source labelled file_only</td></tr>
+      <tr><td>Dual-camera: A correct, B 83 s slow</td><td>Two folders that won't interleave</td><td><span class="num">Computed offset 83.000 s</span>; 3 B photos aligned with 0.000 s error</td></tr>
+      <tr><td>Your originals and pixels</td><td>untouched</td><td>untouched (pixel hashes unchanged on 10/10 files; originals byte-identical on 12/12 files)</td></tr>
+    </table>
+    <p>Full seeded acceptance run: <span class="num">41/41 checks passed</span>. The 5-photo shift ran in 0.01 seconds on the test machine.</p>
+  </div>
+  <h2>How it works</h2>
+  <div class="card">
+    <ol>
+      <li>Open DateShift, pick the folder of photos — run Scan Only first if you like; it writes nothing</li>
+      <li>Enter the offset in seconds (or use dual-camera mode: pick one same-moment photo from each camera and let DateShift compute it)</li>
+      <li>Or fix: get verified copies plus the diagnosis and re-check report, and replace your library files yourself once you've read the green report</li>
+    </ol>
+    <p>Windows 10/11. No account, no subscription, no upload — your photos never leave your computer.</p>
+  </div>
+  <a class="cta" href="https://binbinster.gumroad.com/l/dateshift-photo-date-fixer">Get DateShift — $9 one-time</a>
+  <footer>
+    <p>Honest limits: JPEG and TIFF get full EXIF read and write. HEIC photos get diagnosis plus file-time and filename handling only — HEIC EXIF writes are reported as unsupported, never claimed. RAW formats (CR2, NEF, ARW, DNG and others) are reported as unsupported and skipped, not silently processed. Filename dates are read only from recognised patterns (IMG_YYYYMMDD_HHMMSS, YYYY-MM-DD_HH-MM-SS, YYYYMMDD_HHMMSS, YYYY-MM-DD, YYYYMMDD); an unrecognised name is treated as undated, not guessed. Shifting cannot recover a date that was recorded nowhere — in that case the report says so, and only the file time is shifted, labelled file_only.</p>
+  </footer>
+</div>
+</body>
+</html>
