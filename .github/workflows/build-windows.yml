@@ -1,0 +1,22 @@
+name: build-windows
+on: [push, workflow_dispatch]
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: pip install pyinstaller
+      - name: Install requirements
+        run: pip install -r requirements.txt
+      - name: Build
+        run: pyinstaller dateshift.spec
+      - name: Package
+        run: Compress-Archive -Path dist/DateShift -DestinationPath DateShift-Windows.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: DateShift-Windows
+          path: DateShift-Windows.zip
