@@ -1,0 +1,29 @@
+DateShift seeded acceptance — measured run, 2026-10-27
+Command: python dev/test_acceptance.py (Python 3.12.3, piexif + Pillow 10.2.0)
+Result: 41/41 checks passed, exit 0.
+
+Group 1 — clock fast by 5h37m (20220 s), 5 JPEGs:
+- Shift applied: -20220 s. EXIF error vs ground truth: 0.000 s on all 5 files.
+- File-time error vs ground truth: 0.000 s on all 5 files.
+- Re-check: 5/5 green (EXIF vs file time diff 0.000 s).
+- Shift elapsed: 0.01 s.
+
+Group 2 — filename fallback (JPEG, no EXIF, filename IMG_20230610_091530):
+- Source labelled: filename.
+- EXIF written: 2023-06-10 09:15:30 (from filename, shift 0 s).
+- File time synced: 2023-06-10 09:15:30.
+
+Group 3 — scanned old photo (JPEG, no EXIF, no dated filename):
+- Source labelled: file_only.
+- File time: 1998-05-02 12:00:00 -> 1998-05-02 13:00:00 (shift +3600 s, error 0.000 s).
+
+Group 4 — dual-camera (A correct, B slow by 83 s):
+- Computed dual offset: 83.000 s (tolerance +/- 1 s).
+- B-folder photos (3): aligned to A times with error 0.000 s each.
+
+Safety — throughout:
+- Decoded-pixel hash (Pillow RGB bytes) unchanged: 10/10 processed files.
+- Original input files byte-identical (SHA-256) before/after: 12/12 files
+  (group 1: 5, group 2: 1, group 3: 1, B folder: 3, pair photos: 2).
+- No HEIC or RAW files used in seeds (per task scope); HEIC/RAW handling
+  is implemented as diagnosis-only / reported-unsupported in the engine.
